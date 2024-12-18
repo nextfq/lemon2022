@@ -17,9 +17,13 @@ export default (emitter: EmitterType): Promise<IframeApiType> => {
 
       return;
     } else {
-      load('/.proxy/youtube/iframe_api', (error) => {
+      load('/.proxy/youtube/iframe_api', (error, script) => {
         if (error) {
           emitter.trigger('error', error);
+        } else {
+          const original = script.textContent;
+          const proxyReplaced = original.replace('https://www.youtube.com', '/.proxy/youtube');
+          script.textContent = proxyReplaced;
         }
       });
     }

@@ -21,9 +21,13 @@ exports.default = emitter => {
 
       return;
     } else {
-      (0, _loadScript2.default)('/.proxy/youtube/iframe_api', error => {
+      (0, _loadScript2.default)('/.proxy/youtube/iframe_api', (error, script) => {
         if (error) {
           emitter.trigger('error', error);
+        } else {
+          const original = script.textContent;
+          const proxyReplaced = original.replace('https://www.youtube.com', '/.proxy/youtube');
+          script.textContent = proxyReplaced;
         }
       });
     }
